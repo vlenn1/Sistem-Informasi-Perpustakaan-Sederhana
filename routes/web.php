@@ -7,10 +7,11 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\BorrowingController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\DashboardController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+#Route::get('/', function () {
+#    return view('welcome');
+#});
 
 Route::middleware('guest')->group(function(){
     Route::get('/login', [AuthController::class, 'showlogin'])->name('login');
@@ -18,16 +19,16 @@ Route::middleware('guest')->group(function(){
 });
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
-Route::middleware(['auth', 'role:admin,petugas'])->group(function(){
+Route::middleware(['auth', 'role:admin,petugas'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
-    Route::get('categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
     Route::resource('books', BookController::class);
     Route::resource('members', MemberController::class);
     Route::resource('borrowing', BorrowingController::class);
-    Route::post('/borrowings/{borrowing}/return',[BorrowingController::class, 'returnBook'])->name('borrowings.return');
+    Route::patch('/borrowings/{borrowing}/return', [BorrowingController::class, 'returnBook'])->name('borrowings.return');
 });
 
-Route::middleware(['auth', 'role:admin'])->group(function(){
-    Route::resource('users', UserController::class);
+Route::middleware(['auth', 'can:manage-users'])->group(function () {
+    Route::resource('users', UserController::class)->except(['show']);
     Route::resource('categories', CategoryController::class)->except(['index', 'show']);
 });

@@ -22,7 +22,7 @@ class CategoryController extends Controller
         ]);
         
         Category::create($validated);
-        return redirect()->route('categories.index')->with('Kategori berhasil ditambahkan.');
+        return redirect()->route('categories.index')->with('success','Kategori berhasil ditambahkan.');
     }
 
     public function edit(Category $category){

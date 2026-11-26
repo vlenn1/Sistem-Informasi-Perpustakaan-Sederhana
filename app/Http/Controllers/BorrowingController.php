@@ -8,6 +8,7 @@ use Illuminate\Validation\ValidationException;
 use App\Models\Book;
 use App\Models\Member;
 use App\Models\Borrowing;
+use App\Models\BorrowingDetail;
 
 class BorrowingController extends Controller
 {
@@ -64,10 +65,10 @@ class BorrowingController extends Controller
             }
         });
 
-        return redirect()->route('borrowings.index')->with('Peminjaman berhasil ditambahkan.');
+        return redirect()->route('borrowing.index')->with('success', 'Peminjaman berhasil ditambahkan.');
     }
 
-    public function show(){
+    public function show(Borrowing $borrowing){
         $title = 'Detail Peminjaman';
         $borrowing->load(['member', 'user', 'details.book']);
 
@@ -88,6 +89,6 @@ class BorrowingController extends Controller
             'status' => 'returned',
         ]);
 
-        return redirect()->route('borrowings.show', $borrowing->id)->with('success', 'Buku berhasil dikembalikan.');
+        return redirect()->route('borrowing.show', $borrowing->id)->with('success', 'Buku berhasil dikembalikan.');
     }
 }
