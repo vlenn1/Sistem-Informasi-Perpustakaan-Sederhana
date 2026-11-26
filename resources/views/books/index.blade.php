@@ -5,6 +5,22 @@
 @section('content')
     <h2>{{ $title }}</h2>
 
+    <form action="{{ route('books.index') }}" method="GET">
+        <input type="text" name="search" placeholder="Cari judul atau Penulis..." value="{{ request('search') }}">
+
+        <select name="category_id">
+            <option value="">Semua Kategori</option>
+
+            @foreach ($categories as $category)
+                <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+            @endforeach
+        </select>
+
+        <button type="submit">Cari/Filter</button>
+        <a href="{{ route('books.index') }}">Reset</a>
+    </form>
+    <br>
+
     <a href="{{ route('books.create') }}">Tambah Buku</a>
 
     @if (session('success'))
@@ -30,7 +46,7 @@
         <tbody>
             @forelse ($books as $book)
                 <tr>
-                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $books->firstItem() + $loop->index }}</td>
                     <td>{{ $book->title }}</td>
                     <td>{{ $book->category->name }}</td>
                     <td>{{ $book->author }}</td>

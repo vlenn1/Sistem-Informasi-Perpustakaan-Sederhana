@@ -7,11 +7,22 @@ use Illuminate\Http\Request;
 
 class MemberController extends Controller
 {
-    public function index()
-    {
-        $title = 'Daftar Anggota Perpustakaan';
-        $members = Member::latest()->paginate(10);
 
+    public function index(Request $request){
+        $title = 'Daftar Anggota Perpustakaan';
+
+        $query = Member::query();
+
+        if ($request->filled('search')) {
+            $search = trim($request->search);
+
+            $query->where(function ($q) use ($search) {
+                $q->where('id', 'like', "%{$search}%")->orWhere('name', 'like', "%{$search}%");
+            });
+        }
+
+        $members = $query->latest()->paginate(10)->withQueryString();
+        
         return view('members.index', compact('title', 'members'));
     }
 

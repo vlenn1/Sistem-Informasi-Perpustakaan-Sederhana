@@ -1,4 +1,3 @@
-```blade
 @extends('layouts.app')
 
 @section('title', $title)
@@ -8,8 +7,12 @@
 
     <a href="{{ route('members.create') }}">Tambah Anggota</a>
 
-    <br><br>
-
+    <form action="{{ route('members.index') }}" method="GET">
+        <input type="text" name="search" placeholder="Cari ID atau nama anggota..." value="{{ request('search') }}">
+        <button type="submit">Cari</button>
+        <a href="{{ route('members.index') }}">Reset</a>
+    </form>
+    <br>
     @if (session('success'))
         <p>{{ session('success') }}</p>
     @endif
@@ -52,5 +55,5 @@
     @endforelse
 </tbody>
     </table>
+    {{ $members->links() }}
 @endsection
-```

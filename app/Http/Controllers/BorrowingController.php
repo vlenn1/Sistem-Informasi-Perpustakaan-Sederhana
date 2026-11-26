@@ -12,13 +12,28 @@ use App\Models\BorrowingDetail;
 
 class BorrowingController extends Controller
 {
-    public function index(){
-        $title = 'Daftar Peminjaman';
-        $borrowing = Borrowing::with(['member', 'user'])->latest()->paginate(10);
-        
-        return view('borrowing.index', compact('title', 'borrowing'));
-    }
+public function index(Request $request){
+    $title = 'Daftar Peminjaman';
 
+    $query = Borrowing::with(['member', 'user']);
+
+    if ($request->filled('search')) {
+        $search = $request->search;
+
+        $query->where(function ($q) use ($search) {
+            $q->where('id', 'like', "%{$search}%")->orWhereHas('member', function ($memberQuery) use ($search) {
+                $memberQuery->where('name', 'like', "%{$search}%");
+            });
+        });
+    }
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $borrowing = $query->latest()->paginate(10)->withQueryString();
+
+        return view('borrowing.index', compact('title', 'borrowing'));
+}
     public function create(){
         $title = 'Tambah Peminjaman';
         $members = Member::all();
