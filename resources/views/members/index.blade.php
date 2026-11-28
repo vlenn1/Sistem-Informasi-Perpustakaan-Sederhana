@@ -3,57 +3,75 @@
 @section('title', $title)
 
 @section('content')
-    <h2>{{ $title }}</h2>
+    <div class="page-header">
+        <h2>{{ $title }}</h2>
+        <a href="{{ route('members.create') }}" class="btn">+ Tambah Anggota</a>
+    </div>
 
-    <a href="{{ route('members.create') }}">Tambah Anggota</a>
-
-    <form action="{{ route('members.index') }}" method="GET">
-        <input type="text" name="search" placeholder="Cari ID atau nama anggota..." value="{{ request('search') }}">
-        <button type="submit">Cari</button>
-        <a href="{{ route('members.index') }}">Reset</a>
+    <form action="{{ route('members.index') }}" method="GET" class="search-form">
+        <input type="text" name="search" class="search-input" placeholder="Cari ID atau nama anggota..." value="{{ request('search') }}">
+        <button type="submit" class="btn">Cari</button>
+        <a href="{{ route('members.index') }}" class="btn-back">Reset</a>
     </form>
-    <br>
+
     @if (session('success'))
-        <p>{{ session('success') }}</p>
+        <div class="alert alert-success" style="margin-top: 15px;">
+            {{ session('success') }}
+        </div>
     @endif
 
-    <table border="1" cellpadding="8" cellspacing="0">
+    <table class="table-books">
         <thead>
-    <tr>
-        <th>ID</th>
-        <th>Nama</th>
-        <th>Email</th>
-        <th>No. Telepon</th>
-        <th>Alamat</th>
-        <th>Aksi</th>
-    </tr>
-</thead>
+            <tr>
+                <th>ID</th>
+                <th>Nama</th>
+                <th>Email</th>
+                <th>No. Telepon</th>
+                <th>Alamat</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
 
-<tbody>
-    @forelse ($members as $member)
-        <tr>
-            <td>{{ $member->id }}</td>
-            <td>{{ $member->name }}</td>
-            <td>{{ $member->email }}</td>
-            <td>{{ $member->phone_number }}</td>
-            <td>{{ $member->address }}</td>
-            <td>
-                <a href="{{ route('members.show', $member->id) }}">Detail</a>
-                |
-                <a href="{{ route('members.edit', $member->id) }}">Edit</a>
-                <form action="{{ route('members.destroy', $member->id) }}" method="POST" style="display:inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit">Hapus</button>
-                </form>
-            </td>
-        </tr>
-    @empty
-        <tr>
-            <td colspan="6">Belum ada data anggota.</td>
-        </tr>
-    @endforelse
-</tbody>
+        <tbody>
+            @forelse ($members as $member)
+                <tr>
+                    <td>{{ $member->id }}</td>
+                    <td>{{ $member->name }}</td>
+                    <td>{{ $member->email }}</td>
+                    <td>{{ $member->phone_number }}</td>
+                    <td>{{ $member->address }}</td>
+                    <td>
+                        <a href="{{ route('members.show', $member->id) }}">Detail</a> |
+                        <a href="{{ route('members.edit', $member->id) }}">Edit</a> |
+
+                        <form action="{{ route('members.destroy', $member->id) }}" method="POST" style="display: inline;">
+                            @csrf
+                            @method('DELETE')
+
+                            <button type="submit"
+                                onclick="return confirm('Yakin ingin menghapus anggota ini?')">
+                                Hapus
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="6">Belum ada data anggota.</td>
+                </tr>
+            @endforelse
+        </tbody>
     </table>
-    {{ $members->links() }}
+
+    @if ($members->total() > 0)
+        <div class="table-footer">
+            <div class="pagination">
+                {{ $members->links() }}
+            </div>
+
+            <div class="pagination-info">
+                Showing {{ $members->firstItem() }} - {{ $members->lastItem() }} of {{ $members->total() }}
+            </div>
+        </div>
+    @endif
 @endsection

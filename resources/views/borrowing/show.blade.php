@@ -1,60 +1,100 @@
-
 @extends('layouts.app')
 
 @section('title', 'Detail Peminjaman')
 
 @section('content')
-    <h2>Detail Peminjaman</h2>
+    <div class="page-header">
+        <h2>Detail Peminjaman</h2>
+    </div>
 
-    <h3>Informasi Peminjaman</h3>
+    <div class="card">
+        <div class="card-header">
+            <h3>Informasi Peminjaman</h3>
+        </div>
 
-    <p>Nama Anggota: {{ $borrowing->member->name }}</p>
-    <p>Kode Anggota: {{ $borrowing->member->id }}</p>
-    <p>Petugas: {{ $borrowing->user->name }}</p>
-    <p>Tanggal Peminjaman: {{ $borrowing->borrow_date }}</p>
-    <p>Jatuh Tempo: {{ $borrowing->due_date }}</p>
-    <p>Tanggal Pengembalian: {{ $borrowing->return_date ?? '-' }}</p>
-    <p>Status: {{ $borrowing->status }}</p>
-
-    <h3>Daftar Buku yang Dipinjam</h3>
-
-    <table border="1" cellpadding="8" cellspacing="0">
-        <thead>
+        <table class="table-books" style="margin-top: 0;">
             <tr>
-                <th>Judul Buku</th>
-                <th>Penulis</th>
-                <th>Jumlah</th>
+                <th style="width: 220px;">Nama Anggota</th>
+                <td>{{ $borrowing->member->name }}</td>
             </tr>
-        </thead>
-        <tbody>
-            @forelse ($borrowing->details as $detail)
+            <tr>
+                <th>Kode Anggota</th>
+                <td>{{ $borrowing->member->id }}</td>
+            </tr>
+            <tr>
+                <th>Petugas</th>
+                <td>{{ $borrowing->user->name }}</td>
+            </tr>
+            <tr>
+                <th>Tanggal Peminjaman</th>
+                <td>{{ $borrowing->borrow_date }}</td>
+            </tr>
+            <tr>
+                <th>Jatuh Tempo</th>
+                <td>{{ $borrowing->due_date }}</td>
+            </tr>
+            <tr>
+                <th>Tanggal Pengembalian</th>
+                <td>{{ $borrowing->return_date ?? '-' }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>
+                    <span class="badge-status {{ $borrowing->status == 'borrowed' ? 'status-borrowed' : 'status-returned' }}">
+                        {{ ucfirst($borrowing->status) }}
+                    </span>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3>Daftar Buku yang Dipinjam</h3>
+        </div>
+
+        <table class="table-books" style="margin-top: 0;">
+            <thead>
                 <tr>
-                    <td>{{ $detail->book->title }}</td>
-                    <td>{{ $detail->book->author }}</td>
-                    <td>{{ $detail->quantity }}</td>
+                    <th>Judul Buku</th>
+                    <th>Penulis</th>
+                    <th style="width: 120px;">Jumlah</th>
                 </tr>
-            @empty
-                <tr>
-                    <td colspan="3">Tidak ada detail buku.</td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @forelse ($borrowing->details as $detail)
+                    <tr>
+                        <td>{{ $detail->book->title }}</td>
+                        <td>{{ $detail->book->author }}</td>
+                        <td>{{ $detail->quantity }}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="3">Tidak ada detail buku.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
 
-    <br>
-    @if ($borrowing->status == 'borrowed')
-        <form action="{{ route('borrowings.return', $borrowing->id) }}" method="POST">
-            @csrf
-            @method('PATCH')
+        @if ($borrowing->status != 'borrowed')
+            <div class="alert alert-success" style="margin-top: 18px; margin-bottom: 0;">
+                Buku sudah dikembalikan.
+            </div>
+        @endif
 
-            <button type="submit">Kembalikan Buku</button>
-        </form>
-    @else
-    <br>
-    <p>Buku sudah dikembalikan.</p>
-@endif
+        <div class="form-actions">
+            @if ($borrowing->status == 'borrowed')
+                <form action="{{ route('borrowings.return', $borrowing->id) }}" method="POST" style="display: inline;">
+                    @csrf
+                    @method('PATCH')
 
-<br>
+                    <button type="submit" class="btn" onclick="return confirm('Konfirmasi pengembalian buku ini?')">
+                        Kembalikan Buku
+                    </button>
+                </form>
+            @endif
 
-    <a href="{{ route('borrowing.index') }}">Kembali</a>
+            <a href="{{ route('borrowing.index') }}" class="btn-back">Kembali</a>
+        </div>
+    </div>
 @endsection

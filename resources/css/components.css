@@ -1,0 +1,341 @@
+
+/* PAGE HEADER */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 24px;
+}
+
+.page-header h2 {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.page-header p {
+    color: #888888;
+    font-size: 12px;
+}
+
+/* CARD */
+.card {
+    background: #FFFFFF;
+    border: 1px solid #E8EDE6;
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 20px;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.card-header h3 {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+/* BUTTON */
+.btn {
+    display: inline-block;
+    padding: 9px 16px;
+    background: #a0d295;
+    color: #222222;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: #8bc47e;
+}
+
+.btn-back {
+    display: inline-block;
+    padding: 9px 16px;
+    background: #eeeeee;
+    color: #444444;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 13px;
+}
+
+.btn-back:hover {
+    background: #dddddd;
+}
+
+/* TABLE */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 650px;
+}
+
+.data-table thead {
+    background: #F5F7F4;
+}
+
+.data-table th {
+    padding: 13px 15px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    color: #777777;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+}
+
+.data-table td {
+    padding: 14px 15px;
+    border-bottom: 1px solid #EEEEEE;
+    font-size: 13px;
+    color: #444444;
+    vertical-align: middle;
+}
+
+.data-table tbody tr:hover {
+    background: #FAFCF9;
+}
+
+.data-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.table-actions {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    white-space: nowrap;
+}
+
+/* SEARCH AND FILTER */
+.table-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.search-input,
+.form-control {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #DDDDDD;
+    border-radius: 7px;
+    background: #FFFFFF;
+    outline: none;
+    font-size: 13px;
+}
+
+.search-input {
+    width: 240px;
+}
+
+.search-input:focus,
+.form-control:focus {
+    border-color: #A0D295;
+    box-shadow: 0 0 0 3px rgba(160, 210, 149, 0.15);
+}
+
+/* FORM */
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #444444;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+/* STATUS */
+.badge-status {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.status-active,
+.status-borrowed {
+    background: #EDF6EA;
+    color: #507D45;
+}
+
+.status-returned {
+    background: #F0F1F0;
+    color: #666666;
+}
+
+/* ALERT */
+.alert {
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 18px;
+    font-size: 13px;
+}
+
+.alert-success {
+    background: #EDF6EA;
+    color: #507D45;
+}
+
+.alert-error {
+    background: #FCEEEE;
+    color: #B94A48;
+}
+
+/* RESPONSIVE TABLE */
+@media (max-width: 600px) {
+    .card {
+        padding: 15px;
+    }
+
+    .page-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .search-input {
+        width: 100%;
+    }
+
+    .search-form {
+        width: 100%;
+    }
+}
+
+
+/* TABLE FOOTER (PAGINATION + INFO) */
+.table-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.pagination-info {
+    font-size: 13px;
+    color: #777777;
+    user-select: none; /* Agar teks murni seperti label statis dan tidak mudah terblok */
+}
+
+/* PAGINATION */
+.pagination nav {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.pagination nav > div:last-child {
+    display: none;
+}
+
+.pagination nav > div:first-child {
+    display: flex;
+    gap: 8px;
+}
+
+.pagination nav > div:first-child a,
+.pagination nav > div:first-child span {
+    display: inline-block;
+    padding: 9px 16px;
+    border-radius: 5px;
+    font-size: 13px;
+    text-decoration: none;
+    border: none;
+    background: #a0d295;
+    color: #222222;
+}
+
+.pagination nav > div:first-child a:hover {
+    background: #8bc47e;
+}
+
+.pagination nav > div:first-child span {
+    cursor: default;
+}
+
+
+/* TABLE IMPROVEMENT */
+.table-books {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.table-books th,
+.table-books td {
+    padding: 12px;
+    border-bottom: 1px solid #e8ede6;
+    text-align: left;
+}
+
+.table-books th {
+    background: #eaf4e6;
+    color: #333333;
+    font-weight: 600;
+}
+
+.table-books tr:hover {
+    background: #f8fbf7;
+}
+
+.table-books a {
+    color: #56864b;
+    text-decoration: none;
+}
+
+.table-books a:hover {
+    text-decoration: underline;
+}
+
+.table-books form {
+    display: inline;
+}
+
+.table-books button {
+    background: none;
+    border: none;
+    color: #c05252;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.table-books button:hover {
+    text-decoration: underline;
+}

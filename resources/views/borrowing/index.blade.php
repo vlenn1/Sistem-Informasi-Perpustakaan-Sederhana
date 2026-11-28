@@ -3,35 +3,35 @@
 @section('title', $title)
 
 @section('content')
-    <h2>{{ $title }}</h2>
+    <div class="page-header">
+        <h2>{{ $title }}</h2>
+        <a href="{{ route('borrowing.create') }}" class="btn">+ Tambah Peminjaman</a>
+    </div>
 
-    <a href="{{ route('borrowing.create') }}">Tambah Peminjaman</a>
-    <form action="{{ route('borrowing.index') }}" method="GET">
-        <input type="text" name="search" placeholder="Cari ID peminjaman atau nama anggota..." value="{{ request('search') }}">
+    <form action="{{ route('borrowing.index') }}" method="GET" class="search-form">
+        <input type="text" name="search" class="search-input" placeholder="Cari ID peminjaman atau nama anggota..." value="{{ request('search') }}">
 
-        <select name="status">
+        <select name="status" class="form-control" style="width: auto;">
             <option value="">Semua Status</option>
-            <option value="borrowed"{{ request('status') == 'borrowed' ? 'selected' : '' }}>Borrowed</option>
-            <option value="returned"{{ request('status') == 'returned' ? 'selected' : '' }}>Returned</option>
+            <option value="borrowed" {{ request('status') == 'borrowed' ? 'selected' : '' }}>Borrowed</option>
+            <option value="returned" {{ request('status') == 'returned' ? 'selected' : '' }}>Returned</option>
         </select>
 
-        <button type="submit">Cari / Filter</button>
-        <a href="{{ route('borrowing.index') }}">Reset</a>
+        <button type="submit" class="btn">Cari / Filter</button>
+        <a href="{{ route('borrowing.index') }}" class="btn-back">Reset</a>
     </form>
 
-    <br>
-
-    <br><br>
-
     @if (session('success'))
-        <p>{{ session('success') }}</p>
+        <div class="alert alert-success" style="margin-top: 15px;">
+            {{ session('success') }}
+        </div>
     @endif
 
-    <table border="1" cellpadding="8" cellspacing="0">
+    <table class="table-books">
         <thead>
             <tr>
                 <th>No</th>
-                <th>ID_Peminjaman</th>
+                <th>ID Peminjaman</th>
                 <th>Nama Anggota</th>
                 <th>Petugas</th>
                 <th>Tanggal Pinjam</th>
@@ -50,7 +50,11 @@
                     <td>{{ $item->user->name }}</td>
                     <td>{{ $item->borrow_date }}</td>
                     <td>{{ $item->due_date }}</td>
-                    <td>{{ $item->status }}</td>
+                    <td>
+                        <span class="badge-status {{ $item->status == 'borrowed' ? 'status-borrowed' : 'status-returned' }}">
+                            {{ ucfirst($item->status) }}
+                        </span>
+                    </td>
                     <td>
                         <a href="{{ route('borrowing.show', $item->id) }}">Detail</a>
                     </td>
@@ -63,7 +67,15 @@
         </tbody>
     </table>
 
-    <br>
+    @if ($borrowing->total() > 0)
+        <div class="table-footer">
+            <div class="pagination">
+                {{ $borrowing->links() }}
+            </div>
 
-    {{ $borrowing->links() }}
+            <div class="pagination-info">
+                Showing {{ $borrowing->firstItem() }} - {{ $borrowing->lastItem() }} of {{ $borrowing->total() }}
+            </div>
+        </div>
+    @endif
 @endsection

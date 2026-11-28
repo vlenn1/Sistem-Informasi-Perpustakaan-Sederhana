@@ -3,33 +3,31 @@
 @section('title', $title)
 
 @section('content')
-    <h2>{{ $title }}</h2>
 
-    <form action="{{ route('books.index') }}" method="GET">
-        <input type="text" name="search" placeholder="Cari judul atau Penulis..." value="{{ request('search') }}">
-
-        <select name="category_id">
+    <div class="page-header">
+        <h2>{{ $title }}</h2>
+        <a href="{{ route('books.create') }}" class="btn">+ Tambah Buku</a>
+    </div>
+    <form action="{{ route('books.index') }}" method="GET" class="search-form">
+        <input type="text" name="search" class="search-input" placeholder="Cari judul atau Penulis..." value="{{ request('search') }}">
+        <select name="category_id" class="form-control" style="width: auto;">
             <option value="">Semua Kategori</option>
-
             @foreach ($categories as $category)
                 <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
             @endforeach
         </select>
-
-        <button type="submit">Cari/Filter</button>
-        <a href="{{ route('books.index') }}">Reset</a>
+        <button type="submit" class="btn">Cari/Filter</button>
+        <a href="{{ route('books.index') }}" class="btn-back">Reset</a>
     </form>
     <br>
-
-    <a href="{{ route('books.create') }}">Tambah Buku</a>
-
+    
     @if (session('success'))
         <p style="color: green;">
             {{ session('success') }}
         </p>
     @endif
 
-    <table border="1" cellpadding="8" cellspacing="0">
+    <table class="table-books">
         <thead>
             <tr>
                 <th>No</th>
@@ -75,6 +73,15 @@
             @endforelse
         </tbody>
     </table>
+    @if ($books->total() > 0)
+        <div class="table-footer">
+            <div class="pagination">
+                {{ $books->links() }}
+            </div>
 
-    {{ $books->links() }}
+            <div class="pagination-info">
+                Showing {{ $books->firstItem() }} - {{ $books->lastItem() }} of {{ $books->total() }}
+            </div>
+        </div>
+    @endif
 @endsection
